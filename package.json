@@ -1,0 +1,26 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@types/uuid": "^10.0.0",
+    "cookie-parser": "^1.4.6",
+    "nuxt": "^3.13.0",
+    "typescript-cookie": "^1.0.6",
+    "uuid": "^10.0.0",
+    "vue": "latest",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.12.1",
+    "@types/cookie-parser": "^1.4.7",
+    "nuxt-file-storage": "^0.2.7"
+  }
+}
