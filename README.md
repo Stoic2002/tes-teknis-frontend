@@ -1,75 +1,38 @@
-# Nuxt 3 Minimal Starter
+## Instalasi
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+1. **Clone Repository**
+    Clone repository ini ke komputer lokal Anda dengan perintah berikut:
+    ```bash
+    git clone https://github.com/Stoic2002/tes-teknis-frontend.git
+    ```
 
-## Setup
+2.	Masuk ke Direktori Proyek
+    Setelah repository di-clone, navigasikan ke direktori proyek:
+    ```bash
+    cd tes-teknis-frontend
+    ```
 
-Make sure to install the dependencies:
+3.	Instalasi Dependensi
+    Instal semua dependensi yang diperlukan menggunakan npm atau Yarn. Pilih salah satu perintah berikut:
+    Dengan npm:
+    ```bash
+    npm install
+    ```
+    Dengan yarn:
+    ```bash
+    yarn install
+    ```
 
-```bash
-# npm
-npm install
+4.	Menjalankan Proyek
+    Setelah instalasi selesai, jalankan proyek dengan perintah berikut:
+    Dengan npm:
+     ```bash
+    npm run dev
+    ```
+    Dengan yarn:
+     ```bash
+    yarn run dev
+    ```
 
-# pnpm
-pnpm install
+    Proyek akan berjalan pada http://localhost:3000 secara default.
 
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
