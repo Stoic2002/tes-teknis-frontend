@@ -18,7 +18,7 @@ const { data: allPegawai }: any = await useAsyncData('pegawai', () => $fetch(`${
 }));
 
 const unitKerjaOptions = ref<UnitKerja[]>([]);
-
+ 
 interface UnitKerja {
     id: string;
     nama: string;
