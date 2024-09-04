@@ -10,8 +10,7 @@
       layout: false
     })
 
-    //init config
-    const config = useRuntimeConfig();  
+    const { getByIdJabatan, createJabatan } = useJabatan();
 
     //init router
     const router = useRouter();
@@ -20,22 +19,14 @@
     const { id } = useRoute().params;
 
 
-    //fetch data for get detail data jabatan
-    const { data: jabatan } : any = await useFetch(`${config.public.apiBase}/jabatan/${id}`, {
-        headers : {
-            authorization : `Bearer ${getToken}`
-        } 
-    });
+    const jabatan = await getByIdJabatan(id);
     
-
-    //define state
     const nama     = ref(jabatan.value.nama);
     const eselon     = ref(jabatan.value.eselon);
     const golongan   = ref(jabatan.value.golongan);
     const errors  : any  = ref({});
 
-    //method "updatePost"
-    const updateJabatan = async () => {
+    const update = async () => {
         
         const formData = {
           nama : nama.value,
@@ -43,27 +34,7 @@
           golongan : golongan.value
         }
 
-        //store data with API
-        await $fetch(`${config.public.apiBase}/jabatan/${id}`, {
-
-            headers : {
-            authorization : `Bearer ${getToken}`
-            }, 
-
-            //method
-            method: 'PUT',
-
-            //data
-            body: formData
-        })
-        .then(() => {
-            //redirect
-            router.push({ path: "/jabatan" });
-        })
-        .catch((error) => {
-            //assign response error data to state "errors"
-            errors.value = error.data
-        });
+        await createJabatan(formData).then(() => {router.push({path:'/jabatan'})}).catch((error) => {errors.value = error.data})
     }
 
 </script>
@@ -74,7 +45,7 @@
             <div class="col-md-12">
                 <div class="card border-0 rounded shadow">
                     <div class="card-body">
-                        <form @submit.prevent="updateJabatan()">
+                        <form @submit.prevent="update()">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Nama Jabatan</label>
                                 <input type="text" class="form-control" v-model="nama" placeholder="nama jabatan">

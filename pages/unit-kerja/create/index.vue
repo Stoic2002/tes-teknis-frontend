@@ -27,7 +27,7 @@
         await $fetch(`${config.public.apiBase}/unit-kerja`, {
 
             headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
             }, 
 
             method: 'POST',

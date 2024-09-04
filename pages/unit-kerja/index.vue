@@ -14,7 +14,7 @@
 
     const { data: unitkerja } : any = await useAsyncData('unitKerja', () => $fetch(`${config.public.apiBase}/unit-kerja`, {
         headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
         }, 
         credentials:'include'
         
@@ -26,7 +26,7 @@
         await $fetch(`${config.public.apiBase}/unit-kerja/${id}`, {
 
         headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
         }, 
 
         method: 'DELETE'

@@ -12,7 +12,7 @@ const currentPage = ref(1);
 
 const { data: allPegawai }: any = await useAsyncData('pegawai', () => $fetch(`${config.public.apiBase}/pegawai`, {
     headers: {
-        authorization: `Bearer ${getToken}`
+        authorization: `Bearer ${useToken().getToken}`
     },
 }));
 
@@ -27,7 +27,7 @@ interface UnitKerja {
 const fetchUnitKerja = async () => {
     const units: UnitKerja[] = await $fetch(`${config.public.apiBase}/unit-kerja`, {
         headers: {
-            authorization: `Bearer ${getToken}`
+            authorization: `Bearer ${useToken().getToken}`
         },
     });
     unitKerjaOptions.value = units;
@@ -41,14 +41,14 @@ const deletePegawai = async (id: String, url: String) => {
     try {
         await $fetch(`${config.public.apiBase}/pegawai/${id}`, {
             headers: {
-                authorization: `Bearer ${getToken}`
+                authorization: `Bearer ${useToken().getToken}`
             },
             method: 'DELETE'
         });
 
         await $fetch(`${config.public.apiBase}/delete`, {
             headers: {
-                authorization: `Bearer ${getToken}`
+                authorization: `Bearer ${useToken().getToken}`
             },
             method: 'POST',
             body: {

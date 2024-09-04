@@ -7,8 +7,7 @@
     definePageMeta({
       layout: false
     })
-
-    const config = useRuntimeConfig();  
+    const { createJabatan } = useJabatan();
 
     const router = useRouter();
 
@@ -17,29 +16,14 @@
     const golongan   = ref('');
     const errors  : any  = ref({});
 
-    const createJabatan = async () => {
+    const create = async () => {
 
         const formData = {
           nama : nama.value,
           eselon : eselon.value,
           golongan : golongan.value
         }
-        await $fetch(`${config.public.apiBase}/jabatan`, {
-
-          headers : {
-            authorization : `Bearer ${getToken}`
-        }, 
-
-            method: 'POST',
-
-            body: formData
-        })
-        .then(() => {
-            router.push({ path: "/jabatan" });
-        })
-        .catch((error) => {
-            errors.value = error.data
-        });
+        await createJabatan(formData).then(() => {router.push({path:'/jabatan'})}).catch((error) => {errors.value = error.data} )
     }
 
 
@@ -51,7 +35,7 @@
             <div class="col-md-12">
                 <div class="card border-0 rounded shadow">
                     <div class="card-body">
-                        <form @submit.prevent="createJabatan()">
+                        <form @submit.prevent="create()">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Jabatan</label>
                                 <input type="text" class="form-control" v-model="nama" placeholder="Masukkan nama jabatan">

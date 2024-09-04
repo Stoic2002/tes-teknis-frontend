@@ -14,7 +14,7 @@ const config = useRuntimeConfig();
 
 const { data: pegawai } : any = await useFetch(`${config.public.apiBase}/pegawai/${id}`, {
     headers : {
-        authorization : `Bearer ${getToken}`
+        authorization : `Bearer ${useToken().getToken}`
     }, 
 });
 

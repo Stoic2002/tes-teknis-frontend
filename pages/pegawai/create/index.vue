@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { v4 }  from 'uuid';
+import { useToken } from '../../../composables/globalToken';
 
 useHead({
     title: 'Create Data Pegawai',
@@ -48,14 +49,14 @@ const fetchDropdownData = async () => {
   try {
     const jabatanResponse: Jabatan[] = await $fetch(`${config.public.apiBase}/jabatan`, {
       headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
         }, 
     });
     jabatanOptions.value = jabatanResponse;
 
     const unitKerjaResponse: UnitKerja[] = await $fetch(`${config.public.apiBase}/unit-kerja`, {
       headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
         }, 
     });
     unitKerjaOptions.value = unitKerjaResponse;
@@ -102,7 +103,7 @@ const createPegawai = async () => {
 
     await $fetch(`${config.public.apiBase}/pegawai`, {
         headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
         }, 
         method: 'POST',
         body: form

@@ -17,7 +17,7 @@
 
     const { data: jabatan } : any = await useFetch(`${config.public.apiBase}/unit-kerja/${id}`, {
         headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
         }, 
 
     });
@@ -36,7 +36,7 @@
         await $fetch(`${config.public.apiBase}/unit-kerja/${id}`, {
 
             headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
             }, 
 
             method: 'PUT',
