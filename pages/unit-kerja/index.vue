@@ -9,9 +9,7 @@
         title: 'Data unit kerja',
     });
 
-    const config = useRuntimeConfig();
-
-    const getToken = useCookie('token').value;                
+    const config = useRuntimeConfig();           
 
 
     const { data: unitkerja } : any = await useAsyncData('unitKerja', () => $fetch(`${config.public.apiBase}/unit-kerja`, {

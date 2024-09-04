@@ -19,7 +19,6 @@
     //init route
     const { id } = useRoute().params;
 
-    const getToken = useCookie('token').value;
 
     //fetch data for get detail data jabatan
     const { data: jabatan } : any = await useFetch(`${config.public.apiBase}/jabatan/${id}`, {

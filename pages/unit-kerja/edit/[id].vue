@@ -14,7 +14,6 @@
 
     const { id } = useRoute().params;
     
-    const getToken = useCookie('token').value;
 
     const { data: jabatan } : any = await useFetch(`${config.public.apiBase}/unit-kerja/${id}`, {
         headers : {

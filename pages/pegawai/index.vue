@@ -6,7 +6,6 @@ useHead({
 });
 
 const config = useRuntimeConfig();
-const getToken = useCookie('token').value
 
 const items = ref(8);
 const currentPage = ref(1);

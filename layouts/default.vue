@@ -4,7 +4,7 @@
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center">
             <div class="flex-shrink-0">
-              <NuxtLink to="/" class="text-xl font-bold text-gray-800">Logo</NuxtLink>
+              <NuxtLink to="/" class="text-xl font-bold text-gray-800">Dashboard</NuxtLink>
             </div>
             <div class="hidden md:block">
               <div class="ml-10 flex items-baseline space-x-4">

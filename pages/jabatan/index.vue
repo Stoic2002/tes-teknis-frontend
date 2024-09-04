@@ -11,7 +11,7 @@
     const config = useRuntimeConfig();
 
 
-    const getToken = useCookie('token').value
+    
 
     interface Jabatan {
         id: string;

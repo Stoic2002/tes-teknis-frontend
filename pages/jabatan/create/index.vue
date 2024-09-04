@@ -12,8 +12,6 @@
 
     const router = useRouter();
 
-    const getToken = useCookie('token').value;
-
     const nama     = ref('');
     const eselon     = ref('');
     const golongan   = ref('');

@@ -13,7 +13,6 @@ const config = useRuntimeConfig();
 
 const router = useRouter();
 
-const getToken = useCookie('token').value;
 
 const foto = ref<File | null>(null);
 const nip = ref('');

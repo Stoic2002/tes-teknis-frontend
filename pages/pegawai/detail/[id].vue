@@ -12,9 +12,6 @@ const { id } = useRoute().params;
 
 const config = useRuntimeConfig();
 
-const getToken = useCookie('token').value;
-
-
 const { data: pegawai } : any = await useFetch(`${config.public.apiBase}/pegawai/${id}`, {
     headers : {
         authorization : `Bearer ${getToken}`
