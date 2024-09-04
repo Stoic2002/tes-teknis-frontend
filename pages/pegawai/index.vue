@@ -3,18 +3,18 @@ import * as XLSX from 'xlsx';
 
 useHead({
     title: 'Data Pegawai',
-});
+})
+
+const { getAllPegawai, deletePegawai } = usePegawai();
+
+const { deleteFile } = useFile();
 
 const config = useRuntimeConfig();
 
 const items = ref(8);
 const currentPage = ref(1);
 
-const { data: allPegawai }: any = await useAsyncData('pegawai', () => $fetch(`${config.public.apiBase}/pegawai`, {
-    headers: {
-        authorization: `Bearer ${useToken().getToken}`
-    },
-}));
+const allPegawai = await getAllPegawai();
 
 const unitKerjaOptions = ref<UnitKerja[]>([]);
  
@@ -35,28 +35,15 @@ const fetchUnitKerja = async () => {
 
 fetchUnitKerja();
 
-const deletePegawai = async (id: String, url: String) => {
+const del = async (id: String, url: String) => {
     const filenameToDelete = url.split('/').pop();
 
     try {
-        await $fetch(`${config.public.apiBase}/pegawai/${id}`, {
-            headers: {
-                authorization: `Bearer ${useToken().getToken}`
-            },
-            method: 'DELETE'
-        });
+        await deletePegawai(id);
 
-        await $fetch(`${config.public.apiBase}/delete`, {
-            headers: {
-                authorization: `Bearer ${useToken().getToken}`
-            },
-            method: 'POST',
-            body: {
-                fileName: filenameToDelete
-            }
-        });
+        await deleteFile(filenameToDelete);
 
-        refreshNuxtData()
+        refreshNuxtData();
     } catch (e) {
         console.log(e);
     }
@@ -149,7 +136,7 @@ const exportToExcel = () => {
                                     <td>{{ data.UnitKerja.nama }}</td>
                                     <td class="text-center">
                                         <NuxtLink :to="`/pegawai/detail/${data.id}`" class="btn btn-sm btn-success rounded-sm shadow border-0 me-2">DETAIL</NuxtLink>
-                                        <button @click="deletePegawai(data.id, data.fotoPath)" class="btn btn-sm btn-danger rounded-sm shadow border-0">DELETE</button>
+                                        <button @click="del(data.id, data.fotoPath)" class="btn btn-sm btn-danger rounded-sm shadow border-0">DELETE</button>
                                     </td>
                                 </tr>
                                 <tr v-if="paginatedPegawai.length === 0">

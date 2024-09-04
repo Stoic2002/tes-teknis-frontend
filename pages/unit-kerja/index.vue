@@ -9,30 +9,15 @@
         title: 'Data unit kerja',
     });
 
-    const config = useRuntimeConfig();           
+    const { getAllUnitKerja, deleteUnitKerja  } = useUnitKerja()
+      
 
-
-    const { data: unitkerja } : any = await useAsyncData('unitKerja', () => $fetch(`${config.public.apiBase}/unit-kerja`, {
-        headers : {
-            authorization : `Bearer ${useToken().getToken}`
-        }, 
-        credentials:'include'
-        
-    }));
+    const unitKerja = await getAllUnitKerja();
     
 
-    const deleteUnitKerja = async (id: String) => {
+    const del = async (id: String) => {
 
-        await $fetch(`${config.public.apiBase}/unit-kerja/${id}`, {
-
-        headers : {
-            authorization : `Bearer ${useToken().getToken}`
-        }, 
-
-        method: 'DELETE'
-        });
-
-        refreshNuxtData()
+        await deleteUnitKerja(id).then(() => {refreshNuxtData()}).catch((error) => {console.log(error)});
     }
 
 </script>
@@ -53,12 +38,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(data, index) in unitkerja" :key="index">
+                                <tr v-for="(data, index) in unitKerja" :key="index">
                                     <td>{{ data.nama }}</td>
                                     <td>{{ data.kode }}</td>
                                     <td class="text-center">
                                         <NuxtLink :to="`/unit-kerja/edit/${data.id}`" class="btn btn-sm btn-primary rounded-sm shadow border-0 me-2">EDIT</NuxtLink>
-                                        <button @click="deleteUnitKerja(data.id)" class="btn btn-sm btn-danger rounded-sm shadow border-0">DELETE</button>
+                                        <button @click="del(data.id)" class="btn btn-sm btn-danger rounded-sm shadow border-0">DELETE</button>
                                     </td>
                                 </tr>
                             </tbody>

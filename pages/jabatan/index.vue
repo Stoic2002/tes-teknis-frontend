@@ -5,37 +5,14 @@ useHead({
   title: 'Data Jabatan',
 });
 
-interface Jabatan {
-  id: string;
-  nama: string;
-  eselon: string;
-  golongan: string;
-}
 
 const { getAllJabatan, deleteJabatan } = useJabatan();
-const jabatan = ref<Jabatan[]>([]);
 
-const fetchData = async () => {
-  try {
-    const data = await getAllJabatan();
-    if (data) {
-      jabatan.value = data;
-    }
-  } catch (error) {
-    console.error('Error fetching jabatan:', error);
-  }
-};
+const jabatan = await getAllJabatan();
 
-await fetchData();
 
 const delJabatan = async (id: string) => {
-  try {
-    await deleteJabatan(id);
-
-    await fetchData();
-  } catch (error) {
-    console.error('Error deleting jabatan:', error);
-  }
+  await deleteJabatan(id).then(() => {refreshNuxtData()}).catch((e)=>{console.log(e)})
 };
 
 </script>

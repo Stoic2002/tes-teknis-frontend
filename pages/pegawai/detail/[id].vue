@@ -8,15 +8,11 @@ definePageMeta({
   layout: false
 })
 
+const { getByIdPegawai } = usePegawai();
+
 const { id } = useRoute().params;
 
-const config = useRuntimeConfig();
-
-const { data: pegawai } : any = await useFetch(`${config.public.apiBase}/pegawai/${id}`, {
-    headers : {
-        authorization : `Bearer ${useToken().getToken}`
-    }, 
-});
+const pegawai = await getByIdPegawai(id);
 
 const formattedDate = (date: string) => {
   if (!date) return ''

@@ -8,7 +8,7 @@
       layout: false
     })
 
-    const config = useRuntimeConfig();  
+    const { createUnitKerja } = useUnitKerja();
 
     const router = useRouter();
 
@@ -17,30 +17,15 @@
     const kode     = ref('');
     const errors  : any  = ref({});
 
-    const createUnitKerja = async () => {
+    const create = async () => {
         
         const formData = {
           nama : nama.value,
           kode : kode.value,
         }
 
-        await $fetch(`${config.public.apiBase}/unit-kerja`, {
-
-            headers : {
-            authorization : `Bearer ${useToken().getToken}`
-            }, 
-
-            method: 'POST',
-
-            body: formData
-        })
-        .then(() => {
-            router.push({ path: "/unit-kerja" });
-        })
-        .catch((error) => {
-
-            errors.value = error.data
-        });
+        await createUnitKerja(formData).then(() => {router.push({path: '/unit-kerja'})}).catch((error) => {errors.value = error.data});
+        
     }
 
 
@@ -52,7 +37,7 @@
             <div class="col-md-12">
                 <div class="card border-0 rounded shadow">
                     <div class="card-body">
-                        <form @submit.prevent="createUnitKerja()">
+                        <form @submit.prevent="create()">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Unit Kerja</label>
                                 <input type="text" class="form-control" v-model="nama" placeholder="Masukkan nama jabatan">

@@ -1,15 +1,15 @@
 
-export function useJabatan() {
+export const useJabatan = () => {
   const config = useRuntimeConfig();
 
-
   const getAllJabatan = async () => {
-    const data = await $fetch<Jabatan[]>(`${config.public.apiBase}/jabatan`, {
-      headers: {
-        authorization: 'Bearer ' + useToken().getToken,
-      },
-    });
-    return  data;
+    const {data : jabatan} : any = await useAsyncData('jabatan', () => $fetch(`${config.public.apiBase}/jabatan`, {
+        headers: {
+          authorization: 'Bearer ' + useToken().getToken,
+        },
+        credentials: 'include'
+      }));
+    return jabatan;
   };
 
   const getByIdJabatan = async (id: any) => {

@@ -8,47 +8,27 @@
       layout: false
     })
 
-    const config = useRuntimeConfig();  
+    const { getByIdUnitKerja, updateUnitKerja } = useUnitKerja();
 
     const router = useRouter();
 
     const { id } = useRoute().params;
     
 
-    const { data: jabatan } : any = await useFetch(`${config.public.apiBase}/unit-kerja/${id}`, {
-        headers : {
-            authorization : `Bearer ${useToken().getToken}`
-        }, 
-
-    });
+    const jabatan = await getByIdUnitKerja(id);
     
     const nama     = ref(jabatan.value.nama);
     const kode     = ref(jabatan.value.kode);
     const errors  : any  = ref({});
 
-    const updateUnitKerja = async () => {
+    const update = async () => {
         
         const formData = {
           nama : nama.value,
           kode : kode.value,
         }
 
-        await $fetch(`${config.public.apiBase}/unit-kerja/${id}`, {
-
-            headers : {
-            authorization : `Bearer ${useToken().getToken}`
-            }, 
-
-            method: 'PUT',
-
-            body: formData
-        })
-        .then(() => {
-            router.push({ path: "/unit-kerja" });
-        })
-        .catch((error) => {
-            errors.value = error.data
-        });
+        await updateUnitKerja(id, formData).then(() => {router.push({ path: '/unit-kerja'})}).catch((error) => { errors.value = error.data });
     }
 
 </script>
@@ -59,7 +39,7 @@
             <div class="col-md-12">
                 <div class="card border-0 rounded shadow">
                     <div class="card-body">
-                        <form @submit.prevent="updateUnitKerja()">
+                        <form @submit.prevent="update()">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Unit Kerja</label>
                                 <input type="text" class="form-control" v-model="nama" placeholder="nama jabatan">

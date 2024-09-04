@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { v4 }  from 'uuid';
-import { useToken } from '../../../composables/globalToken';
 
 useHead({
     title: 'Create Data Pegawai',
@@ -9,6 +8,14 @@ useHead({
 definePageMeta({
   layout: false
 })
+
+const { createPegawai } = usePegawai();
+
+const { uploadFile } = useFile();
+
+const { getAllJabatan } = useJabatan();
+
+const { getAllUnitKerja } = useUnitKerja();
 
 const config = useRuntimeConfig();  
 
@@ -75,18 +82,18 @@ const handleFileChange = (e: Event) => {
   }
 };
 
-const createPegawai = async () => {
+const create = async () => {
   const formattedTanggalLahir = tanggalLahir.value ? new Date(tanggalLahir.value).toISOString() : '';
   const randomString = v4();
   const filename = randomString + foto.value?.name
-  const filepath = config.public.apiBase + '/file/' + filename;
+  const filepath = foto.value ? config.public.apiBase + '/file/' + filename : '';
 
   const data = new FormData();
     if (foto.value) {
     data.append('fotoPath', foto.value, filename);
     }
   
-    const form = {
+    const formData = {
       fotoPath: filepath,
       nip: nip.value,
       nama: nama.value,
@@ -101,28 +108,7 @@ const createPegawai = async () => {
       jabatanId: jabatanId.value,
     };
 
-    await $fetch(`${config.public.apiBase}/pegawai`, {
-        headers : {
-            authorization : `Bearer ${useToken().getToken}`
-        }, 
-        method: 'POST',
-        body: form
-    })
-    .then( async () => {
-      await $fetch(`${config.public.apiBase}/upload`, {
-      method: 'PUT',
-      body: data,
-    }).then(()=>{
-      router.push({ path: "/pegawai" });
-    }).catch((error) => {
-      console.log(error);
-    })
-      
-        
-    })
-    .catch((error) => {
-        errors.value = error.data;
-    });
+    await createPegawai(formData).then( async () => {await uploadFile(data); router.push({path:'/pegawai'})}).catch((e) => {console.log(e)});
 };
 
 </script>
@@ -133,7 +119,7 @@ const createPegawai = async () => {
             <div class="col-md-12">
                 <div class="card border-0 rounded shadow">
                     <div class="card-body">
-                        <form @submit.prevent="createPegawai()">
+                        <form @submit.prevent="create()">
                           <div class="mb-3">
                             <label class="form-label fw-bold">Upload Foto</label>
                               <input type="file" class="form-control" @change="handleFileChange" accept=".png, .jpg, .jpeg">

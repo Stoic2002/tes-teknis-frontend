@@ -9,19 +9,21 @@ definePageMeta({
   layout: false
 })
 
+const { getByIdPegawai, updatePegawai } = usePegawai();
+
+const { deleteFile, uploadFile } = useFile();
+
+const { getAllJabatan } = useJabatan();
+
+const { getAllUnitKerja } = useUnitKerja();
+
 const config = useRuntimeConfig();  
 
 const router = useRouter();
 
 const { id } = useRoute().params;
 
-const getToken = useCookie('token').value;
-
-const { data: pegawai } : any = await useFetch(`${config.public.apiBase}/pegawai/${id}`, {
-    headers : {
-            authorization : `Bearer ${getToken}`
-    }, 
-});
+const pegawai = await getByIdPegawai(id);
 
 const formattedDate = new Date(pegawai.value.tanggalLahir).toISOString().split('T')[0];
 
@@ -60,14 +62,14 @@ const fetchDropdownData = async () => {
   try {
     const jabatanResponse: Jabatan[] = await $fetch(`${config.public.apiBase}/jabatan`,{
       headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
         }, 
     });
     jabatanOptions.value = jabatanResponse;
 
     const unitKerjaResponse: UnitKerja[] = await $fetch(`${config.public.apiBase}/unit-kerja`,{
       headers : {
-            authorization : `Bearer ${getToken}`
+            authorization : `Bearer ${useToken().getToken}`
         }, 
     });
     unitKerjaOptions.value = unitKerjaResponse;
@@ -87,7 +89,7 @@ const handleFileChange = (e: Event) => {
 };
 
 
-const updatePegawai = async () => {
+const update = async () => {
   const formattedTanggalLahir = tanggalLahir.value ? new Date(tanggalLahir.value).toISOString() : '';
   const randomString = v4();
   const filename = randomString + foto.value?.name;
@@ -100,7 +102,7 @@ const updatePegawai = async () => {
     data.append('fotoPath', foto.value, filename);
     }
   
-    const form = {
+    const formData = {
       fotoPath: filepath,
       nip: nip.value,
       nama: nama.value,
@@ -116,31 +118,16 @@ const updatePegawai = async () => {
     };
 
     try {
-    await $fetch(`${config.public.apiBase}/pegawai/${id}`, {
-      headers : {
-            authorization : `Bearer ${getToken}`
-      }, 
-      method: 'PUT',
-      body: form
-    });
+    await updatePegawai(id, formData);
 
     if (foto.value) {
-      await $fetch(`${config.public.apiBase}/delete`, {
-        method: 'POST',
-        body: {
-          fileName: filenameToDelete
-        }
-      });
+      await deleteFile(filenameToDelete);
 
-      await $fetch(`${config.public.apiBase}/upload`, {
-        method: 'PUT',
-        body: data,
-      });
+      await uploadFile(data);
     }
 
     router.back();
   } catch (error) {
-    console.error(error);
     console.log(error);
   }
 };
@@ -153,7 +140,7 @@ const updatePegawai = async () => {
             <div class="col-md-12">
                 <div class="card border-0 rounded shadow">
                     <div class="card-body">
-                        <form @submit.prevent="updatePegawai()">
+                        <form @submit.prevent="update()">
                           <div class="mb-3">
                             <label class="form-label fw-bold">Upload Foto</label>
                               <input type="file" class="form-control" @change="handleFileChange" accept=".png, .jpg, .jpeg">
