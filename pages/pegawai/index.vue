@@ -119,7 +119,6 @@ const exportToExcel = () => {
                                 <tr>
                                     <th scope="col">NIP</th>
                                     <th scope="col">Nama</th>
-                                    <th scope="col">Tempat Lahir</th>
                                     <th scope="col">NPWP</th>
                                     <th scope="col">Jabatan</th>
                                     <th scope="col">Unit Kerja</th>
@@ -130,7 +129,6 @@ const exportToExcel = () => {
                                 <tr v-for="(data, index) in paginatedPegawai" :key="index">
                                     <td>{{ data.nip }}</td>
                                     <td>{{ data.nama }}</td>
-                                    <td>{{ data.tempatLahir }}</td>
                                     <td>{{ data.npwp }}</td>
                                     <td>{{ data.Jabatan.nama }}</td>
                                     <td>{{ data.UnitKerja.nama }}</td>
