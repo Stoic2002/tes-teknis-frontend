@@ -123,7 +123,7 @@ const exportToExcel = () => {
                                     <th scope="col">NPWP</th>
                                     <th scope="col">Jabatan</th>
                                     <th scope="col">Unit Kerja</th>
-                                    <th scope="col" style="width:15%">Actions</th>
+                                    <th scope="col" style="width:10%">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -135,8 +135,8 @@ const exportToExcel = () => {
                                     <td>{{ data.Jabatan.nama }}</td>
                                     <td>{{ data.UnitKerja.nama }}</td>
                                     <td class="text-center">
-                                        <NuxtLink :to="`/pegawai/detail/${data.id}`" class="btn btn-sm btn-success rounded-sm shadow border-0 me-2">DETAIL</NuxtLink>
-                                        <button @click="del(data.id, data.fotoPath)" class="btn btn-sm btn-danger rounded-sm shadow border-0">DELETE</button>
+                                        <NuxtLink :to="`/pegawai/detail/${data.id}`" class="btn btn-md btn-success rounded-sm shadow border-0 me-2">DETAIL</NuxtLink>
+                                        <button @click="del(data.id, data.fotoPath)" class="btn btn-md btn-danger rounded-sm shadow border-0 me-2 mt-2">DELETE</button>
                                     </td>
                                 </tr>
                                 <tr v-if="paginatedPegawai.length === 0">
