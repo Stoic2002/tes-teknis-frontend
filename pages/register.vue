@@ -1,3 +1,48 @@
+<script setup lang="ts">
+
+  const router = useRouter();
+
+  definePageMeta({
+    layout: false,
+  })
+
+  const { register } = useAuth();
+  
+  const email = ref('');
+  const password = ref('');
+  const confirmPassword = ref('');
+  const showPassword = ref(false);
+  const showConfirmPassword = ref(false);
+  const errors  : any  = ref({});
+  
+  const togglePasswordVisibility = () => {
+    showPassword.value = !showPassword.value;
+  };
+  
+  const toggleConfirmPasswordVisibility = () => {
+    showConfirmPassword.value = !showConfirmPassword.value;
+  };
+
+
+  
+  const handleRegister = async () => {
+    if (password.value !== confirmPassword.value) {
+      alert('Password and Confirm Password do not match.');
+      return;
+    }
+
+     const formData = {
+          email : email.value,
+          password : password.value,
+        }
+
+        await register(formData).then(() => {router.push({ path: "/login" });}).catch((error) => {errors.value = error.data})
+
+
+  };
+
+  </script>
+
 <template>
     <div class="container min-vh-100 d-flex align-items-center justify-content-center">
       <div class="card border-0 rounded shadow p-4 w-100" style="max-width: 400px;">
@@ -53,62 +98,6 @@
       </div>
     </div>
   </template>
-  
-  <script setup lang="ts">
-
-  const config = useRuntimeConfig();
-
-  const router = useRouter();
-
-  definePageMeta({
-    layout: false,
-  })
-  
-  const email = ref('');
-  const password = ref('');
-  const confirmPassword = ref('');
-  const showPassword = ref(false);
-  const showConfirmPassword = ref(false);
-  const errors  : any  = ref({});
-  
-  const togglePasswordVisibility = () => {
-    showPassword.value = !showPassword.value;
-  };
-  
-  const toggleConfirmPasswordVisibility = () => {
-    showConfirmPassword.value = !showConfirmPassword.value;
-  };
-
-
-  
-  const handleRegister = async () => {
-    if (password.value !== confirmPassword.value) {
-      alert('Password and Confirm Password do not match.');
-      return;
-    }
-
-     const formData = {
-          email : email.value,
-          password : password.value,
-        }
-
-        await $fetch(`${config.public.apiBase}/register`, {
-
-            method: 'POST',
-
-            body: formData
-        })
-        .then(() => {
-            router.push({ path: "/login" });
-        })
-        .catch((error) => {
-
-            errors.value = error.data
-        });
-
-  };
-
-  </script>
   
   <style scoped>
   .toggle-icon {

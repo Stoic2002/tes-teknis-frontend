@@ -1,20 +1,14 @@
 
 <script setup lang="ts">
 
-const route = useRoute();
+const { logout } = useAuth();
 
-const config = useRuntimeConfig();
+const route = useRoute();
 
 const isActive = (path: string) => route.path === path;
 
-const logout = async () => {
-  const response = await $fetch(`${config.public.apiBase}/logout`, {
-    method: 'POST',
-    credentials: 'include'
-  });
-  if (response) {
-    navigateTo('/login', { replace: true });
-  }
+const handleLogout = async () => {
+  await logout().then(() => { navigateTo('/login', { replace: true })}).catch((e) => {console.log(e)});
 }
 </script>
 
@@ -49,7 +43,7 @@ const logout = async () => {
         </div>
       </div>
       <div class="px-4 py-6">
-        <button @click="logout" class="bg-red-500 text-white w-full px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition-colors">
+        <button @click="handleLogout" class="bg-red-500 text-white w-full px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition-colors">
           Logout
         </button>
       </div>

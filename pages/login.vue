@@ -41,7 +41,7 @@
   </template>
   
   <script setup lang="ts">
-  const config = useRuntimeConfig();
+  const { login } = useAuth();
 
   const router = useRouter();
 
@@ -58,21 +58,13 @@
   };
   
   const handleLogin = async () => {
-   try{
-    const response:any = await $fetch(`${config.public.apiBase}/login`, {
-            method: 'POST',
-            body: {
-                email : email.value,
-                password: password.value
-            },
-            credentials : 'include'
-    })
+   const formData = {
+    email: email.value,
+    password: password.value
 
-        router.replace('/');
-
-   }catch (error) {
-    console.log(error);
    }
+
+   await login(formData).then(() => {router.replace('/')}).catch((e) => {console.log(e)});
 
     };
   </script>
