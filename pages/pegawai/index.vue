@@ -5,16 +5,15 @@ useHead({
     title: 'Data Pegawai',
 })
 
-const { getAllPegawai, deletePegawai } = usePegawai();
-
+const { deletePegawai, getAllPegawai } = usePegawai();
 const { deleteFile } = useFile();
 
 const config = useRuntimeConfig();
 
-const items = ref(8);
+const items = ref(6);
 const currentPage = ref(1);
 
-const allPegawai = await getAllPegawai();
+const pegawaiData = ref(await getAllPegawai(currentPage.value, items.value));
 
 const unitKerjaOptions = ref<UnitKerja[]>([]);
  
@@ -35,15 +34,28 @@ const fetchUnitKerja = async () => {
 
 fetchUnitKerja();
 
+const fetchAllPegawai = async () => {
+    let allPegawai:any = [];
+    let page = 1;
+    let hasMore = true;
+
+    while (hasMore) {
+        const response = await getAllPegawai(page, items.value);
+        allPegawai = allPegawai.concat(response.data);
+        page++;
+        hasMore = page <= response.totalPages;
+    }
+
+    return allPegawai;
+};
+
 const del = async (id: String, url: String) => {
     const filenameToDelete = url.split('/').pop();
 
     try {
         await deletePegawai(id);
-
         await deleteFile(filenameToDelete);
-
-        refreshNuxtData();
+        pegawaiData.value = await getAllPegawai(currentPage.value, items.value);
     } catch (e) {
         console.log(e);
     }
@@ -53,26 +65,23 @@ const searchQuery = ref('');
 const selectedUnitKerja = ref('');
 
 const filteredPegawai = computed(() => {
-    return allPegawai.value.filter((data: any) =>
+    return pegawaiData.value.data.filter((data: any) =>
         data.nama.toLowerCase().includes(searchQuery.value.toLowerCase()) &&
         (selectedUnitKerja.value ? data.unitKerjaId === selectedUnitKerja.value : true)
     );
 });
 
-const paginatedPegawai = computed(() => {
-    const startIndex = (currentPage.value - 1) * items.value;
-    const endIndex = startIndex + items.value;
-    return filteredPegawai.value.slice(startIndex, endIndex);
-});
+const totalPages = computed(() => pegawaiData.value.totalPages);
 
-const totalPages = computed(() => Math.ceil(filteredPegawai.value.length / items.value));
-
-const goToPage = (page: number) => {
+const goToPage = async (page: number) => {
     currentPage.value = page;
+    pegawaiData.value = await getAllPegawai(currentPage.value, items.value, searchQuery.value, selectedUnitKerja.value);
 };
 
-const exportToExcel = () => {
-    const pegawaiData = filteredPegawai.value.map((data: any) => ({
+const exportToExcel = async () => {
+    const allPegawai = await fetchAllPegawai();
+
+    const pegawaiDataExport = allPegawai.map((data: any) => ({
         'NIP': data.nip,
         'Nama': data.nama,
         'Tempat Lahir': data.tempatLahir,
@@ -88,7 +97,7 @@ const exportToExcel = () => {
         'NPWP': data.npwp,
     }));
 
-    const worksheet = XLSX.utils.json_to_sheet(pegawaiData);
+    const worksheet = XLSX.utils.json_to_sheet(pegawaiDataExport);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Data Pegawai");
     XLSX.writeFile(workbook, 'Data_Pegawai.xlsx');
@@ -105,11 +114,11 @@ const exportToExcel = () => {
                         <button @click="exportToExcel" class="btn btn-md btn-info rounded shadow border-0 me-2">Cetak</button>
                     </div>
                     <div class="d-flex align-items-center">
-                        <select v-model="selectedUnitKerja" class="form-select w-auto me-2">
-                            <option value="">Semua Unit Kerja</option>
-                            <option v-for="unit in unitKerjaOptions" :key="unit.id" :value="unit.id">{{ unit.nama }}</option>
+                        <select v-model="selectedUnitKerja" @change="goToPage(1)" class="form-select w-auto me-2">
+                        <option value="">Semua Unit Kerja</option>
+                        <option v-for="unit in unitKerjaOptions" :key="unit.id" :value="unit.id">{{ unit.nama }}</option>
                         </select>
-                        <input type="text" v-model="searchQuery" class="form-control w-auto" placeholder="Cari nama..."/>
+                        <input type="text" v-model="searchQuery" @input="goToPage(1)" class="form-control w-auto" placeholder="Cari nama..."/>
                     </div>
                 </div>
                 <div class="card border-0 rounded shadow">
@@ -126,7 +135,7 @@ const exportToExcel = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(data, index) in paginatedPegawai" :key="index">
+                                <tr v-for="(data, index) in filteredPegawai" :key="index">
                                     <td>{{ data.nip }}</td>
                                     <td>{{ data.nama }}</td>
                                     <td>{{ data.npwp }}</td>
@@ -137,8 +146,8 @@ const exportToExcel = () => {
                                         <button @click="del(data.id, data.fotoPath)" class="btn btn-md btn-danger rounded-sm shadow border-0 me-2 mt-2">DELETE</button>
                                     </td>
                                 </tr>
-                                <tr v-if="paginatedPegawai.length === 0">
-                                    <td colspan="15" class="text-center">Data tidak ditemukan</td>
+                                <tr v-if="filteredPegawai.length === 0">
+                                    <td colspan="6" class="text-center">Data tidak ditemukan</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -161,7 +170,6 @@ const exportToExcel = () => {
         </div>
     </div>
 </template>
-
 
 <style scoped>
 .pagination .page-link {
