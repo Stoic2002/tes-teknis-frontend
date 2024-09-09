@@ -109,94 +109,133 @@ const exportToExcel = async () => {
 </script>
 
 <template>
-    <div class="container mt-5 mb-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="d-flex align-items-center">
-                        <NuxtLink to="/pegawai/create" class="btn btn-md btn-success rounded shadow border-0 me-2">Tambah Data Pegawai</NuxtLink>
-                        <button @click="exportToExcel" class="btn btn-md btn-info rounded shadow border-0 me-2">Cetak</button>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <select v-model="selectedUnitKerja" @change="goToPage(1)" class="form-select w-auto me-2">
-                        <option value="">Semua Unit Kerja</option>
-                        <option v-for="unit in unitKerjaOptions" :key="unit.id" :value="unit.id">{{ unit.nama }}</option>
-                        </select>
-                        <input type="text" v-model="searchQuery" @input="goToPage(1)" class="form-control w-auto" placeholder="Cari nama..."/>
-                    </div>
-                </div>
-                <div class="card border-0 rounded shadow">
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead class="bg-dark text-white">
-                                <tr>
-                                    <th scope="col">NIP</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">NPWP</th>
-                                    <th scope="col">Jabatan</th>
-                                    <th scope="col">Unit Kerja</th>
-                                    <th scope="col" style="width:10%">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(data, index) in filteredPegawai" :key="index">
-                                    <td>{{ data.nip }}</td>
-                                    <td>{{ data.nama }}</td>
-                                    <td>{{ data.npwp }}</td>
-                                    <td>{{ data.Jabatan.nama }}</td>
-                                    <td>{{ data.UnitKerja.nama }}</td>
-                                    <td class="text-center">
-                                        <NuxtLink :to="`/pegawai/detail/${data.id}`" class="btn btn-md btn-success rounded-sm shadow border-0 me-2">DETAIL</NuxtLink>
-                                        <button @click="del(data.id, data.fotoPath)" class="btn btn-md btn-danger rounded-sm shadow border-0 me-2 mt-2">DELETE</button>
-                                    </td>
-                                </tr>
-                                <tr v-if="filteredPegawai.length === 0">
-                                    <td colspan="6" class="text-center">Data tidak ditemukan</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <nav aria-label="Page navigation" class="mt-4">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                                    <a class="page-link" href="#" @click.prevent="goToPage(currentPage - 1)">Previous</a>
-                                </li>
-                                <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
-                                    <a class="page-link" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
-                                </li>
-                                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                                    <a class="page-link" href="#" @click.prevent="goToPage(currentPage + 1)">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+    <div class="container mx-auto px-4 py-8">
+      <div class="flex flex-wrap justify-between items-center mb-2">
+        <div class="flex flex-wrap items-center sm:mb-0">
+          <NuxtLink 
+            to="/pegawai/create" 
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded shadow transition duration-300 mr-2 sm:mb-0 hidden sm:inline-block"
+          >
+            Tambah Data
+          </NuxtLink>
+          <button 
+            @click="exportToExcel" 
+            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow transition duration-300 hidden sm:inline-block"
+          >
+            Cetak
+          </button>
+          <button 
+            @click="$router.push('/pegawai/create')"
+            class="bg-green-500 hover:bg-green-600 text-white p-2 rounded shadow transition duration-300 sm:hidden"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+          </button>
+          <button 
+            @click="exportToExcel"
+            class="bg-blue-500 hover:bg-blue-600 text-white p-2 ml-2 rounded shadow transition duration-300 sm:hidden"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+            </svg>
+          </button>
         </div>
+        <div class="flex flex-wrap items-center">
+          <select 
+            v-model="selectedUnitKerja" 
+            @change="goToPage(1)" 
+            class="form-select w-full sm:w-auto mb-2 sm:mb-0 sm:mr-2 p-2 mt-2 rounded border"
+          >
+            <option value="">Semua Unit Kerja</option>
+            <option v-for="unit in unitKerjaOptions" :key="unit.id" :value="unit.id">{{ unit.nama }}</option>
+          </select>
+          <input 
+            type="text" 
+            v-model="searchQuery" 
+            @input="goToPage(1)" 
+            class="form-input w-full sm:w-auto p-2 rounded border" 
+            placeholder="Cari nama..."
+          />
+        </div>
+      </div>
+  
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIP</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NPWP</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Kerja</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="(data, index) in filteredPegawai" :key="index">
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.nip }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.nama }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.npwp }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.Jabatan.nama }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.UnitKerja.nama }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <NuxtLink 
+                    :to="`/pegawai/detail/${data.id}`" 
+                    class="text-green-600 hover:text-green-900 mr-2">
+                    Detail
+                  </NuxtLink>
+                  <button 
+                    @click="del(data.id, data.fotoPath)" 
+                    class="text-red-600 hover:text-red-900">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              <tr v-if="filteredPegawai.length === 0">
+                <td colspan="6" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
+                  Data tidak ditemukan
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  
+      <nav aria-label="Page navigation" class="mt-4">
+  <ul class="flex justify-center">
+    <li :class="{ 'opacity-50 cursor-not-allowed': currentPage === 1 }">
+      <a 
+        class="px-3 py-2 bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 rounded-l-md"
+        href="#" 
+        @click.prevent="goToPage(currentPage - 1)"
+      >
+        Previous
+      </a>
+    </li>
+    <li v-for="page in totalPages" :key="page" :class="{ 'bg-gray-200': currentPage === page }">
+      <a 
+        class="px-3 py-2 bg-white border border-gray-300 text-gray-300 hover:bg-gray-100"
+        :class="{ 'text-black': currentPage === page }"
+        href="#" 
+        @click.prevent="goToPage(page)"
+      >
+        {{ page }}
+      </a>
+    </li>
+    <li :class="{ 'opacity-50 cursor-not-allowed': currentPage === totalPages }">
+      <a 
+        class="px-3 py-2 bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 rounded-r-md"
+        href="#" 
+        @click.prevent="goToPage(currentPage + 1)"
+      >
+        Next
+      </a>
+    </li>
+  </ul>
+</nav>
+
     </div>
-</template>
-
-<style scoped>
-.pagination .page-link {
-  color: #000;
-  background-color: #fff;
-  border-color: #dee2e6;
-}
-
-.pagination .page-link:hover {
-  color: #fff;
-  background-color: #000;
-  border-color: #000;
-}
-
-.pagination .page-item.active .page-link {
-  color: #fff;
-  background-color: #000;
-  border-color: #000;
-}
-
-.pagination .page-item.disabled .page-link {
-  color: #6c757d;
-  background-color: #fff;
-  border-color: #dee2e6;
-}
-</style>
+  </template>
+  

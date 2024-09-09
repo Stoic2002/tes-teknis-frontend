@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-
 useHead({
-    title: 'Detail Pegawai'
+  title: 'Detail Pegawai'
 })
 
 definePageMeta({
@@ -26,7 +25,6 @@ const showModal = ref(false);
 const toggleModal = () => {
   showModal.value = !showModal.value;
 }
-
 </script>
 
 <style scoped>
