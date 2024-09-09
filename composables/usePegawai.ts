@@ -4,10 +4,12 @@ export const usePegawai = () => {
     const createPegawai = async (formData: any) => {
         await $fetch(`${config.public.apiBase}/pegawai`, {
             headers : {
-                authorization : `Bearer ${useToken().getToken}`
+                authorization : `Bearer ${useToken().getToken}`,
+                'x-csrf-token': useToken().csrfToken || ''
             }, 
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'include'
         });
     };
 
@@ -22,7 +24,8 @@ export const usePegawai = () => {
                 pageSize,
                 search,
                 unitKerja
-            }
+            },
+            credentials: 'include'
         }));
     
         return pegawai.value;
@@ -33,6 +36,7 @@ export const usePegawai = () => {
             headers : {
                 authorization : `Bearer ${useToken().getToken}`
             }, 
+            credentials: 'include'
         });
 
         return pegawai;
@@ -41,19 +45,23 @@ export const usePegawai = () => {
     const updatePegawai = async (id: any, formData: any) => {
         await $fetch(`${config.public.apiBase}/pegawai/${id}`, {
             headers : {
-                authorization : `Bearer ${useToken().getToken}`
+                authorization : `Bearer ${useToken().getToken}`,
+                'x-csrf-token': useToken().csrfToken || ''
             }, 
             method: 'PUT',
-            body: formData
+            body: formData,
+            credentials: 'include'
         });
     };
 
     const deletePegawai = async (id: any) => {
         await $fetch(`${config.public.apiBase}/pegawai/${id}`, {
             headers: {
-                authorization: `Bearer ${useToken().getToken}`
+                authorization: `Bearer ${useToken().getToken}`,
+                'x-csrf-token': useToken().csrfToken || ''
             },
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include'
         });
     };
 

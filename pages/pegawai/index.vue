@@ -5,6 +5,10 @@ useHead({
     title: 'Data Pegawai',
 })
 
+definePageMeta({
+  middleware: 'auth'
+});
+
 const { deletePegawai, getAllPegawai } = usePegawai();
 const { deleteFile } = useFile();
 

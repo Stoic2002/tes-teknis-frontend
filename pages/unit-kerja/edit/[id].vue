@@ -5,7 +5,8 @@
 
 
     definePageMeta({
-      layout: false
+      layout: false,
+      middleware:'auth'
     })
 
     const { getByIdUnitKerja, updateUnitKerja } = useUnitKerja();

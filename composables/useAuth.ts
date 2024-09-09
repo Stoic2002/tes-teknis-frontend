@@ -2,6 +2,8 @@ export const useAuth = () => {
 
     const config = useRuntimeConfig();
 
+    const csrfToken = ref('');
+
     const register = async (formData: any) => {
         await $fetch(`${config.public.apiBase}/register`, {
 
@@ -12,11 +14,13 @@ export const useAuth = () => {
     }
 
     const login = async (formData: any) => {
-        await $fetch(`${config.public.apiBase}/login`, {
+       const res:any = await $fetch(`${config.public.apiBase}/login`, {
             method: 'POST',
             body: formData,
             credentials : 'include'
-    })
+    })  
+        const csrf = res.csrfToken;
+        localStorage.setItem('X', btoa(csrf));
     }
 
     const logout = async () => {
@@ -24,7 +28,10 @@ export const useAuth = () => {
             method: 'POST',
             credentials: 'include'
           });
+
+          localStorage.removeItem('X')
     }
 
-    return { register, login, logout }
+
+    return { register, login, logout, csrfToken }
 }

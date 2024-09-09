@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import auth from '~/middleware/auth';
+
 
     //meta title
     useHead({
@@ -7,7 +9,8 @@
 
 
     definePageMeta({
-      layout: false
+      layout: false,
+      middleware: 'auth'
     })
 
     const { getByIdJabatan, createJabatan } = useJabatan();

@@ -6,7 +6,8 @@ useHead({
 });
 
 definePageMeta({
-  layout: false
+  layout: false,
+  middleware:'auth'
 })
 
 const { createPegawai } = usePegawai();

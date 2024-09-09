@@ -16,7 +16,8 @@ export const useJabatan = () => {
     const { data: jabatan } : any = await useFetch(`${config.public.apiBase}/jabatan/${id}`, {
         headers : {
             authorization : `Bearer ${useToken().getToken}`
-        } 
+        } ,
+        credentials: 'include'
     });
 
     return jabatan;
@@ -26,12 +27,14 @@ export const useJabatan = () => {
     await $fetch(`${config.public.apiBase}/jabatan`, {
 
         headers : {
-          authorization : `Bearer ${useToken().getToken}`
+          authorization : `Bearer ${useToken().getToken}`,
+          'x-csrf-token': useToken().csrfToken || ''
       }, 
 
           method: 'POST',
 
-          body: formData
+          body: formData,
+          credentials: 'include'
       })
   }
 
@@ -39,8 +42,10 @@ export const useJabatan = () => {
     await $fetch(`${config.public.apiBase}/jabatan/${id}`, {
       headers: {
         authorization: 'Bearer ' + useToken().getToken,
+        'x-csrf-token': useToken().csrfToken || ''
       },
       method: 'DELETE',
+      credentials: 'include'
     });
 
   };

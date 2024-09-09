@@ -5,8 +5,10 @@
 
 
     definePageMeta({
-      layout: false
+      layout: false,
+      middleware: 'auth'
     })
+
     const { createJabatan } = useJabatan();
 
     const router = useRouter();

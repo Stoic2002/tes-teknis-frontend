@@ -1,9 +1,9 @@
 
 <script setup lang="ts">
 
-// definePageMeta({
-//   middleware: ['auth']
-// })
+definePageMeta({
+  middleware: 'auth'
+});
 
     useHead({
         title: 'Data unit kerja',

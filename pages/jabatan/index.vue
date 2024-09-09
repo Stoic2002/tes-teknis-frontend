@@ -5,6 +5,10 @@ useHead({
   title: 'Data Jabatan',
 });
 
+definePageMeta({
+  middleware: 'auth'
+});
+
 
 const { getAllJabatan, deleteJabatan } = useJabatan();
 

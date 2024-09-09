@@ -5,12 +5,14 @@ export const useUnitKerja = () => {
         await $fetch(`${config.public.apiBase}/unit-kerja`, {
     
             headers : {
-              authorization : `Bearer ${useToken().getToken}`
+              authorization : `Bearer ${useToken().getToken}`,
+              'x-csrf-token': useToken().csrfToken || ''
           }, 
     
               method: 'POST',
     
-              body: formData
+              body: formData,
+              credentials: 'include'
           })
       }
 
@@ -33,6 +35,8 @@ export const useUnitKerja = () => {
             headers : {
                 authorization : `Bearer ${useToken().getToken}`
             }, 
+
+            credentials: 'include'
     
         });
 
@@ -43,12 +47,15 @@ export const useUnitKerja = () => {
         await $fetch(`${config.public.apiBase}/unit-kerja/${id}`, {
 
             headers : {
-            authorization : `Bearer ${useToken().getToken}`
+            authorization : `Bearer ${useToken().getToken}`,
+            'x-csrf-token': useToken().csrfToken || ''
             }, 
 
             method: 'PUT',
 
-            body: formData
+            body: formData,
+
+            credentials : 'include'
         })
     }
 
@@ -56,10 +63,13 @@ export const useUnitKerja = () => {
         await $fetch(`${config.public.apiBase}/unit-kerja/${id}`, {
 
             headers : {
-                authorization : `Bearer ${useToken().getToken}`
+                authorization : `Bearer ${useToken().getToken}`,
+                'x-csrf-token' : useToken().csrfToken
             }, 
     
-            method: 'DELETE'
+            method: 'DELETE',
+
+            credentials: 'include'
             });
     }
 
