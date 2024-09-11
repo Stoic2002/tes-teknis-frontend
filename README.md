@@ -38,6 +38,7 @@
 
 
 ## Preview
+**Click the image**
 [![Watch the video](public/preview//preview_img.png)](https://youtu.be/JiK2p_smLZw)
 
 
