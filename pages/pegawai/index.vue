@@ -106,6 +106,15 @@ const exportToExcel = async () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Data Pegawai");
     XLSX.writeFile(workbook, 'Data_Pegawai.xlsx');
 }
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('id-ID', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).split('/').join('-');
+}
 </script>
 
 <template>
@@ -167,6 +176,12 @@ const exportToExcel = async () => {
               <tr>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIP</th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tempat lahir</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Lahir</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Kelamin</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Golongan</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Eselon</th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NPWP</th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan</th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Kerja</th>
@@ -177,6 +192,12 @@ const exportToExcel = async () => {
               <tr v-for="(data, index) in filteredPegawai" :key="index">
                 <td class="px-6 py-4 whitespace-nowrap">{{ data.nip }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ data.nama }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.tempatLahir }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.alamat }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ formatDate(data.tanggalLahir) }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.jenisKelamin == 'male' ? 'L' : 'P' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.Jabatan.golongan }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ data.Jabatan.eselon }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ data.npwp }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ data.Jabatan.nama }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ data.UnitKerja.nama }}</td>

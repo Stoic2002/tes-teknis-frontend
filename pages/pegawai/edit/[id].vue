@@ -14,10 +14,6 @@ const { getByIdPegawai, updatePegawai } = usePegawai();
 
 const { deleteFile, uploadFile } = useFile();
 
-const { getAllJabatan } = useJabatan();
-
-const { getAllUnitKerja } = useUnitKerja();
-
 const config = useRuntimeConfig();  
 
 const router = useRouter();
