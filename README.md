@@ -36,3 +36,8 @@
 
     Proyek akan berjalan pada http://localhost:3000 secara default.
 
+
+## Preview
+[![Watch the video]](https://youtu.be/JiK2p_smLZw)
+
+
