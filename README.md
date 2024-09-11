@@ -38,6 +38,6 @@
 
 
 ## Preview
-[![Watch the video]](https://youtu.be/JiK2p_smLZw)
+[![Watch the video](public/preview//preview_img.png)](https://youtu.be/JiK2p_smLZw)
 
 
